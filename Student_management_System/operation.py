@@ -6,19 +6,34 @@ from db import conn , cursor
 def add_student():
     try:
         name = input("Enter student name : ")
-        marks = input("Enter student marks : ")
+        age = int(input("Enter your age :"))
+        gender = input( "Gender (M/F) :")
+        if gender.upper() not in ["MALE","FEMALE"]:
+            print("Invalid Gender")
+            return   
+        email = input("Enter your mail id : ")
+        if "@" not in email :
+            print("Invalid Email")
+            return
+        phone = input("Enter your contact number : ")
+        course = input("Which course : ")
+        marks = int(input("Enter student marks : "))
 
-        query = "insert into students(name,marks) values(%s,%s)"
+        query = "insert into students(name,age,gender,email,phone,course,marks) values(%s,%s,%s,%s,%s,%s,%s)"
 
-        values = (name,marks)
+        values = (name,age,gender,email,phone,course,marks)
         cursor.execute(query,values)
         conn.commit()
 
         print("Student details added successfully")
     
     except ValueError:
-        print("Marks must be a number")
 
+        print("Please enter valid numeric values")
+
+    except Exception as e:
+
+        print("Error :", e)
 #View Students
 
 def view_student():
@@ -41,6 +56,13 @@ def update_student():
     query = "update students set marks = %s where name = %s"
     values = (new_marks,name)
     cursor.execute(query,values)
+    if cursor.rowcount > 0:
+
+         print("Marks updated successfully")
+
+    else:
+
+        print("Student not found")
 
     conn.commit()
 
@@ -56,6 +78,10 @@ def delete_student():
 
     conn.commit()
     print("Data Deleted successfully")
+    if cursor.rowcount > 0:
+        print("Updated Successfully")
+    else:
+        print("Student not found")
 
 
 #searching student Details
@@ -64,7 +90,12 @@ def search_student():
     # while True:
         print("1. id")
         print("2. name")
-        print("3. marks")
+        print("3. age")
+        print("4. gender")
+        print("5. email")
+        print("6. phone")
+        print("7. course")
+        print("8. marks")
 
         choose = input("What do yo want to search : ")
 
@@ -82,8 +113,43 @@ def search_student():
 
             cursor.execute(query,(name,))
 
-
         elif choose == "3":
+            age = input("Enter student age : ")
+
+            query = "select * from students where age = %s"
+
+            cursor.execute(query,(age,))
+       
+        elif choose == "4":
+            gender = input("Enter student gender : ")
+
+            query = "select * from students where gender = %s"
+
+            cursor.execute(query,(gender,))
+        
+        elif choose == "5":
+            email = input("Enter student email : ")
+
+            query = "select * from students where email = %s"
+
+            cursor.execute(query,(email,))
+        
+        elif choose == "6":
+            phone = input("Enter student phone : ")
+
+            query = "select * from students where phone = %s"
+
+            cursor.execute(query,(phone,))
+        
+        elif choose == "7":
+            course = input("Enter student course : ")
+
+            query = "select * from students where course = %s"
+
+            cursor.execute(query,(course,))
+
+
+        elif choose == "8":
             marks = input("Enter student marks : ")
 
             query = "select * from students where marks = %s"
@@ -101,11 +167,16 @@ def search_student():
         if data:
             print("\n --- Search Results ---")
             for row in data:
-                print(f"""
-                      ID : {row[0]})
-                      Name : {row[1]})
-                      Marks : {row[2]}
-                      """)
+               print(f"""
+                    ID        : {row[0]}
+                    Name      : {row[1]}
+                    Marks     : {row[2]}
+                    Age       : {row[3]}
+                    Gender    : {row[4]}
+                    Email     : {row[5]}
+                    Phone No  : {row[6]}
+                    Course    : {row[7]}
+""")
         
         else:
             print("No student found")
