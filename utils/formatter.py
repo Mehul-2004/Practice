@@ -1,0 +1,11 @@
+def display_employee(employee):
+            print(f"Employee ID : {employee[0]}")
+            print(f"Name        : {employee[1]} {employee[2]}")
+            print(f"Gender      : {employee[3]}")
+            print(f"Age         : {employee[4]}")
+            print(f"Department  : {employee[5]}")
+            print(f"Designation : {employee[6]}")
+            print(f"Salary      : {employee[7]}")
+            print(f"Email       : {employee[8]}")
+            print(f"Phone       : {employee[9]}")
+            print("-" * 40)
